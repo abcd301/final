@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/NIB/api/kacha/exchangeRate" name="Kacha-Tunes_ExchangeRate" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST">
+        <inSequence>
+            <log level="custom">
+                <property name="NIB-API" value="####################### KACHA-TUNES-EXCHANGE-RATE #######################"/>
+            </log>
+            <propertyGroup>
+                <property expression="substring-after($trp:Authorization,'Basic ')" name="Authorization" scope="default" type="STRING"/>
+                <property expression="get-property('kachaTunesCred')" name="kachaTunesCred" scope="default" type="OM"/>
+                <property expression="$ctx:kachaTunesCred//*[local-name()='password']" name="ProdPass" scope="default" type="STRING"/>
+                <property expression="$ctx:kachaTunesCred//*[local-name()='username']" name="ProdUser" scope="default" type="STRING"/>
+                <property expression="json-eval($.currency)" name="currency" scope="default" type="STRING"/>
+            </propertyGroup>
+            <property expression="get-property('axis2','REMOTE_ADDR')" name="client_ip_address" scope="default" type="STRING"/>
+            <log level="custom">
+                <property expression="get-property('client_ip_address')" name="Client IP address"/>
+            </log>
+            <filter xpath="get-property('currency') != ''">
+                <then/>
+                <else>
+                    <log level="custom">
+                        <property name="Error" value="Currency is empty"/>
+                    </log>
+                    <property name="messageType" scope="axis2" type="STRING" value="400"/>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+	"status":"fail",&#xd;
+	"errorMessage":"currency is empty."&#xd;
+}</format>
+                        <args/>
+                    </payloadFactory>
+                    <respond/>
+                </else>
+            </filter>
+            <sequence key="credentials"/>
+            <payloadFactory media-type="xml">
+                <format>
+                    <soapenv:Envelope xmlns:mmt="http://temenos.com/MMT" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                        <soapenv:Header/>
+                        <soapenv:Body>
+                            <mmt:CURRENCYRATES>
+                                <WebRequestCommon xmlns="">
+                                    <!--Optional:-->
+                                    <company>ET0010001</company>
+                                    <password>$1</password>
+                                    <userName>$2</userName>
+                                </WebRequestCommon>
+                                <CURRENCYRATESType xmlns="">
+                                    <!--Zero or more repetitions:-->
+                                    <enquiryInputCollection>
+                                        <!--Optional:-->
+                                        <columnName>CURRENCY.CODE</columnName>
+                                        <!--Optional:-->
+                                        <criteriaValue>$3</criteriaValue>
+                                        <!--Optional:-->
+                                        <operand>EQ</operand>
+                                    </enquiryInputCollection>
+                                </CURRENCYRATESType>
+                            </mmt:CURRENCYRATES>
+                        </soapenv:Body>
+                    </soapenv:Envelope>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('ProdPass')"/>
+                    <arg evaluator="xml" expression="get-property('ProdUser')"/>
+                    <arg evaluator="xml" expression="get-property('currency')"/>
+                </args>
+            </payloadFactory>
+            <send>
+                <endpoint key="KACHA-THUNES_EXCHANGERATE_EP"/>
+            </send>
+        </inSequence>
+        <outSequence>
+            <log level="custom">
+                <property name="NIB-API" value="####################### KACHA-TUNES-EXCHANGE-RATE-RESPONSE #######################"/>
+            </log>
+            <propertyGroup>
+                <property expression="//successIndicator" name="successIndicator" scope="default" type="STRING" xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"/>
+                <property expression="//messages/text()" name="message" scope="default" type="STRING" xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"/>
+                <property expression="//ns9:Ccy/text()" name="Currency" scope="default" type="STRING" xmlns:ns10="http://temenos.com/ACCTCOMPANYVIEW" xmlns:ns11="http://temenos.com/MMT" xmlns:ns2="http://temenos.com/ACCTVIEW" xmlns:ns3="http://temenos.com/EMMTTXNFT" xmlns:ns4="http://temenos.com/FUNDSTRANSFERACTRMMT" xmlns:ns5="http://temenos.com/FUNDSTRANSFER" xmlns:ns6="http://temenos.com/ACCTBALCTS" xmlns:ns7="http://temenos.com/EMMTMINISTMT" xmlns:ns8="http://temenos.com/EMMTMINISTMTDATE" xmlns:ns9="http://temenos.com/CURRENCYRATES"/>
+                <property expression="//ns9:mCURRENCYRATESDetailType[1]/ns9:BuyRate/text()" name="CurrencyBuyRate" scope="default" type="STRING" xmlns:ns10="http://temenos.com/ACCTCOMPANYVIEW" xmlns:ns11="http://temenos.com/MMT" xmlns:ns2="http://temenos.com/ACCTVIEW" xmlns:ns3="http://temenos.com/EMMTTXNFT" xmlns:ns4="http://temenos.com/FUNDSTRANSFERACTRMMT" xmlns:ns5="http://temenos.com/FUNDSTRANSFER" xmlns:ns6="http://temenos.com/ACCTBALCTS" xmlns:ns7="http://temenos.com/EMMTMINISTMT" xmlns:ns8="http://temenos.com/EMMTMINISTMTDATE" xmlns:ns9="http://temenos.com/CURRENCYRATES"/>
+                <property expression="//ns9:mCURRENCYRATESDetailType[1]/ns9:SellRate/text()" name="CurrencySellRate" scope="default" type="STRING" xmlns:ns10="http://temenos.com/ACCTCOMPANYVIEW" xmlns:ns11="http://temenos.com/MMT" xmlns:ns2="http://temenos.com/ACCTVIEW" xmlns:ns3="http://temenos.com/EMMTTXNFT" xmlns:ns4="http://temenos.com/FUNDSTRANSFERACTRMMT" xmlns:ns5="http://temenos.com/FUNDSTRANSFER" xmlns:ns6="http://temenos.com/ACCTBALCTS" xmlns:ns7="http://temenos.com/EMMTMINISTMT" xmlns:ns8="http://temenos.com/EMMTMINISTMTDATE" xmlns:ns9="http://temenos.com/CURRENCYRATES"/>
+                <property expression="//messages/text()[contains(.,'No records were found that matched the selection criteria')]" name="notFound" scope="default" type="STRING" xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"/>
+            </propertyGroup>
+            <log level="custom">
+                <property expression="get-property('successIndicator')" name="successIndicator"/>
+            </log>
+            <filter xpath="get-property('message') != ''">
+                <then>
+                    <log level="custom">
+                        <property expression="get-property('message')" name="Message"/>
+                    </log>
+                </then>
+                <else/>
+            </filter>
+            <filter xpath="get-property('message')='' or get-property('successIndicator')='success'">
+                <then>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+	"status":"success",&#xd;	"currency": "$1",&#xd;	"buyRate": $2,&#xd;
+	"sellRate": $3&#xd;}</format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('Currency')"/>
+                            <arg evaluator="xml" expression="get-property('CurrencyBuyRate')"/>
+                            <arg evaluator="xml" expression="get-property('CurrencySellRate')"/>
+                        </args>
+                    </payloadFactory>
+                    <send/>
+                </then>
+                <else>
+                    <switch source="get-property('message')">
+                        <case regex="CCYCcy/CURRENCY.MARKETCcy Market/MID.REVAL.RATEMid Rate/BUY.RATEBuy Rate/SELL.RATESell RateNo records were found that matched the selection criteria">
+                            <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                            <payloadFactory media-type="json">
+                                <format>{&#xd;
+"status":"fail",&#xd; "errorMessage": "Currency is not found or does not exist."&#xd;}</format>
+                                <args/>
+                            </payloadFactory>
+                            <send/>
+                        </case>
+                        <case regex="CURRENCY.RATES//-1/,INVALID/ NO SIGN ON NAME SUPPLIED DURING SIGN ON PROCESS">
+                            <property name="HTTP_SC" scope="axis2" type="STRING" value="401"/>
+                            <payloadFactory media-type="json">
+                                <format>{&#xd;
+"status":"fail",&#xd; "errorMessage": "Invalid credentials"&#xd;}</format>
+                                <args/>
+                            </payloadFactory>
+                            <send/>
+                        </case>
+                        <case regex="CURRENCY.RATES//-1/,SECURITY VIOLATION DURING SIGN ON PROCESS">
+                            <property name="HTTP_SC" scope="axis2" type="STRING" value="401"/>
+                            <payloadFactory media-type="json">
+                                <format>{"status":"fail",&#xd; "errorMessage": "Invalid credentials"&#xd;}</format>
+                                <args/>
+                            </payloadFactory>
+                            <send/>
+                        </case>
+                        <default>
+                            <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
+                            <payloadFactory media-type="json">
+                                <format>{"status":"fail",&#xd; "errorMessage":"Unhandled exception occured."&#xd;}</format>
+                                <args/>
+                            </payloadFactory>
+                            <send/>
+                        </default>
+                    </switch>
+                </else>
+            </filter>
+        </outSequence>
+        <faultSequence>
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
+            <log level="custom">
+                <property name="Base Error" value="An unexpected error occured"/>
+            </log>
+            <log level="custom">
+                <property expression="get-property('ERROR_CODE')" name="ERROR_CODE"/>
+            </log>
+            <log level="custom">
+                <property expression="get-property('ERROR_MESSAGE')" name="ERROR_MESSAGE"/>
+            </log>
+            <log level="custom">
+                <property expression="get-property('ERROR_DETAIL')" name="ERROR_DETAIL"/>
+            </log>
+            <log level="full"/>
+            <makefault version="pox">
+                <reason value="Invalid response/Unhandled exception"/>
+                <detail>Invalid response</detail>
+            </makefault>
+            <filter xpath="get-property('ERROR_MESSAGE') = 'Currently , Address endpoint : [ Name : KACHA-THUNES_EXCHANGERATE_EP ] [ State : MAINTNENCE ]'">
+                <then>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+	"status": "fail",&#xd;
+    "errorMessage": "Service is under maintenance."&#xd;
+}</format>
+                        <args/>
+                    </payloadFactory>
+                </then>
+                <else>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+	"status": "fail",&#xd;
+    "errorMessage": "$1"&#xd;
+}</format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('ERROR_MESSAGE')"/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <respond/>
+        </faultSequence>
+    </resource>
+</api>

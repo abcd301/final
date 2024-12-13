@@ -1,0 +1,13 @@
+openapi: 3.0.1
+info:
+  title: Kacha-Tunes_ETB_ETB
+  description: API Definition of Kacha-Tunes_ETB_ETB
+  version: 1.0.0
+servers:
+- url: http://localhost:8290/NIB/api/kacha/transfer/etb-etb
+paths:
+  /:
+    post:
+      responses:
+        default:
+          description: Default response

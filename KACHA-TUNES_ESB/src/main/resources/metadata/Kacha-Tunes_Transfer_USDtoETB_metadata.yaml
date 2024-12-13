@@ -1,0 +1,10 @@
+---
+key: "Kacha-Tunes_Transfer_USDtoETB-1.0.0"
+name : "Kacha-Tunes_Transfer_USDtoETB"
+displayName : "Kacha-Tunes_Transfer_USDtoETB"
+description: "Sample API"
+version: "1.0.0"
+serviceUrl: "https://{MI_HOST}:{MI_PORT}/et"
+definitionType: "OAS3"
+securityType: "BASIC"
+mutualSSLEnabled: false

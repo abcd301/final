@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="Kacha-Tunes-TXN-Response" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <filter xmlns:ns="http://org.apache.synapse/xsd" xpath="get-property('override')!=''">
+        <then>
+            <switch source="get-property('override')">
+                <case regex="POSTING.RESTRICT">
+                    <log level="custom">
+                        <property name="Error Case" value="Frozen Account"/>
+                    </log>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+	"status": "fail",    &#xd;
+    "messages": "Temporarily Frozen Account"&#xd;
+}</format>
+                        <args/>
+                    </payloadFactory>
+                    <respond/>
+                </case>
+                <case regex="SAME.ACCT">
+                    <log>
+                        <property name="Error Case" value="Debit and Credit account are the same"/>
+                    </log>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+	"status": "fail",    &#xd;
+    "messages": "Same Debit Credit Account"&#xd;
+}</format>
+                        <args/>
+                    </payloadFactory>
+                    <respond/>
+                </case>
+                <default>
+                    <log level="custom">
+                        <property name="Error Case" value="Default"/>
+                    </log>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+	"status": "fail",    &#xd;
+    "messages": "Currently Disabled Account"&#xd;
+}</format>
+                        <args/>
+                    </payloadFactory>
+                    <respond/>
+                </default>
+            </switch>
+        </then>
+        <else/>
+    </filter>
+    <filter xmlns:ns="http://org.apache.synapse/xsd" xpath="get-property('successIndicator')='Success'">
+        <then/>
+        <else>
+            <switch source="get-property('messages')">
+                <case regex="SECURITY VIOLATION DURING SIGN ON PROCESS">
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+	"status": "fail",    &#xd;
+    "errorMessage": "Security violation during sign on process."&#xd;
+}</format>
+                        <args/>
+                    </payloadFactory>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="401"/>
+                    <respond/>
+                </case>
+                <case regex="INVALID/ NO SIGN ON NAME SUPPLIED DURING SIGN ON PROCESS">
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+"status": "fail",&#xd; "errorMessage": "Invalid credentials."&#xd;
+}</format>
+                        <args/>
+                    </payloadFactory>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="401"/>
+                    <respond/>
+                </case>
+                <case regex="CREDIT.CURRENCY:1:1=CREDIT ACCT CCY NOT EQ CREDIT CCY">
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+"status": "fail",&#xd; "errorMessage": "Different currencies."&#xd;
+}</format>
+                        <args/>
+                    </payloadFactory>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                    <respond/>
+                </case>
+                <default>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+	"status": "fail",    &#xd;
+    "messages": "$1"&#xd;
+}</format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('transactionId')"/>
+                            <arg evaluator="xml" expression="get-property('messages')"/>
+                        </args>
+                    </payloadFactory>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
+                    <respond/>
+                </default>
+            </switch>
+        </else>
+    </filter>
+</sequence>

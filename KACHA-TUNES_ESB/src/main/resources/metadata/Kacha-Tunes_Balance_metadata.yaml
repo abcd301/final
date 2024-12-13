@@ -1,0 +1,10 @@
+---
+key: "Kacha-Tunes_Balance-1.0.0"
+name : "Kacha-Tunes_Balance"
+displayName : "Kacha-Tunes_Balance"
+description: "Sample API"
+version: "1.0.0"
+serviceUrl: "https://{MI_HOST}:{MI_PORT}/NIB/api/kacha/balance"
+definitionType: "OAS3"
+securityType: "BASIC"
+mutualSSLEnabled: false

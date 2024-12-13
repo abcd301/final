@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localEntry key="kachaTunesCred" xmlns="http://ws.apache.org/ns/synapse">
+    <credentials>
+        <username>KACHA01</username>
+        <password>PassKaCh@KACHA1</password>
+    </credentials>
+</localEntry>

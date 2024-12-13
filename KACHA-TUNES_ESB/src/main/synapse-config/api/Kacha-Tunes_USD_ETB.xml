@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/NIB/api/kacha/transfer/usd-etb" name="Kacha-Tunes_USD_ETB" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST">
+        <inSequence>
+            <log level="custom">
+                <property name="NIB-API" value="####################### KACHA-TUNES-FUND-TRANSFER #######################"/>
+            </log>
+            <property expression="get-property('axis2','REMOTE_ADDR')" name="client_ip_address" scope="default" type="STRING"/>
+            <log level="custom">
+                <property expression="get-property('client_ip_address')" name="Client IP address"/>
+            </log>
+            <validate cache-schema="true" source="json-eval($)">
+                <schema key="transferSchemaKachaTunesUSDETB"/>
+                <on-fail>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd; "errorMessage":"$1"&#xd;}</format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:ERROR_MESSAGE"/>
+                        </args>
+                    </payloadFactory>
+                    <log level="custom">
+                        <property expression="$ctx:ERROR_MESSAGE" name="Error"/>
+                    </log>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="412"/>
+                    <respond/>
+                </on-fail>
+            </validate>
+            <propertyGroup>
+                <property expression="substring-after($trp:Authorization,'Basic ')" name="Authorization" scope="default" type="STRING"/>
+                <property name="txnType" scope="default" type="STRING" value="usd-etb"/>
+            </propertyGroup>
+            <sequence key="credentials"/>
+            <propertyGroup>
+                <property expression="json-eval($.creditedAccount)" name="creditedAccount" scope="default" type="STRING"/>
+                <property expression="json-eval($.debitedAccount)" name="debitedAccount" scope="default" type="STRING"/>
+                <property expression="json-eval($.debitedAmount)" name="debitedAmount" scope="default" type="STRING"/>
+                <property expression="json-eval($.debitCurrency)" name="debitCurrency" scope="default" type="STRING"/>
+                <property expression="json-eval($.externalRef)" name="externalRef" scope="default" type="STRING"/>
+                <property expression="get-property('kachaTunesCred')" name="kachaTunesCred" scope="default" type="OM"/>
+                <property expression="json-eval($.processingDate)" name="processingDate" scope="default" type="STRING"/>
+                <property expression="json-eval($.paymentDetails[0].paymentDetail)" name="paymentDetail" scope="default" type="STRING"/>
+                <property expression="$ctx:kachaTunesCred//*[local-name()='password']" name="ProdPass" scope="default" type="STRING"/>
+                <property expression="$ctx:kachaTunesCred//*[local-name()='username']" name="ProdUser" scope="default" type="STRING"/>
+                <property expression="json-eval($.senderID)" name="senderID" scope="default" type="STRING"/>
+            </propertyGroup>
+            <switch source="get-property('creditedAccount')">
+                <case regex="ETB1258200010019"/>
+                <default>
+                    <log level="custom">
+                        <property name="Error" value="Service for this account is not allowed"/>
+                    </log>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="401"/>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+"status":"fail",&#xd;
+ "errorMessage": "Service for this account is not allowed.",&#xd;
+    "accountNumber": "$1"&#xd;
+}</format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('creditedAccount')"/>
+                        </args>
+                    </payloadFactory>
+                    <respond/>
+                </default>
+            </switch>
+            <switch source="get-property('debitedAccount')">
+                <case regex="USD1792200020019"/>
+                <default>
+                    <log level="custom">
+                        <property name="Error" value="Service for this account is not allowed"/>
+                    </log>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="401"/>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+"status":"fail",&#xd;
+ "errorMessage": "Service for this account is not allowed.",&#xd;
+    "accountNumber": "$1"&#xd;
+}</format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('debitedAccount')"/>
+                        </args>
+                    </payloadFactory>
+                    <respond/>
+                </default>
+            </switch>
+            <filter xpath="get-property('user') =get-property('senderID')">
+                <then/>
+                <else>
+                    <log level="custom">
+                        <property name="SenderID Check" value="SenderID mismatch"/>
+                    </log>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+   "status": "fail",&#xd;
+   "errorMessage":"senderID Mismatch",&#xd;
+}</format>
+                        <args/>
+                    </payloadFactory>
+                    <respond/>
+                </else>
+            </filter>
+            <log level="custom">
+                <property expression="get-property('txnType')" name="txnType"/>
+                <property expression="get-property('user')" name="senderID"/>
+                <property expression="json-eval($.creditedAccount)" name="creditedAccount"/>
+                <property expression="json-eval($.debitedAmount)" name="debitedAmount"/>
+                <property expression="json-eval($.debitCurrency)" name="creditCurrency"/>
+                <property expression="json-eval($.processingDate)" name="processingDate"/>
+                <property expression="json-eval($.paymentDetails[0].paymentDetail)" name="paymentDetail"/>
+                <property expression="get-property('externalRef')" name="externalRef"/>
+            </log>
+            <sequence key="Kacha-Tunes_Validate"/>
+            <sequence key="Kacha-Tunes-TXN"/>
+        </inSequence>
+        <outSequence>
+            <propertyGroup>
+                <property expression="//successIndicator" name="successIndicator" scope="default" type="STRING" xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"/>
+                <property expression="//transactionId" name="transactionId" scope="default" type="STRING" xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"/>
+                <property expression="//messages/text()" name="messages" scope="default" type="STRING" xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"/>
+            </propertyGroup>
+            <log level="custom">
+                <property name="NIB-API" value="####################### NIB-API-FUND-TRANSFER-RESPONSE #######################"/>
+            </log>
+            <log level="custom">
+                <property expression="get-property('successIndicator')" name="Status"/>
+                <property expression="get-property('transactionId')" name="transactionId"/>
+                <property expression="get-property('messages')" name="messages"/>
+            </log>
+            <switch source="get-property('successIndicator')">
+                <case regex="Success">
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;   "status": "$1",&#xd;   "transactionID":"$2"&#xd;}</format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('successIndicator')"/>
+                            <arg evaluator="xml" expression="get-property('transactionId')"/>
+                        </args>
+                    </payloadFactory>
+                </case>
+                <case regex="T24Error">
+                    <sequence key="Kacha-Tunes-TXN-Response"/>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;   "status": "fail",&#xd;   "errorMessage":"$1",&#xd;}</format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('message')"/>
+                        </args>
+                    </payloadFactory>
+                </case>
+                <default>
+                    <log level="full"/>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;   "status": "fail",&#xd;   "errorMessage":"Unhandled error occured",&#xd;}</format>
+                        <args/>
+                    </payloadFactory>
+                </default>
+            </switch>
+            <send/>
+        </outSequence>
+        <faultSequence>
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
+            <log level="custom">
+                <property name="Base Error" value="An unexpected error occured"/>
+            </log>
+            <log level="custom">
+                <property expression="get-property('ERROR_CODE')" name="ERROR_CODE"/>
+            </log>
+            <log level="custom">
+                <property expression="get-property('ERROR_MESSAGE')" name="ERROR_MESSAGE"/>
+            </log>
+            <log level="custom">
+                <property expression="get-property('ERROR_DETAIL')" name="ERROR_DETAIL"/>
+            </log>
+            <log level="full"/>
+            <makefault version="pox">
+                <reason value="Invalid response/Unhandled exception"/>
+                <detail>Invalid response</detail>
+            </makefault>
+            <filter xpath="get-property('ERROR_MESSAGE') = 'Currently , Address endpoint : [ Name : KACHA-THUNES-TXN_EP ] [ State : MAINTNENCE ]'">
+                <then>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+	"status": "fail",&#xd;
+    "errorMessage": "Service is under maintenance."&#xd;
+}</format>
+                        <args/>
+                    </payloadFactory>
+                </then>
+                <else>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+	"status": "fail",&#xd;
+    "errorMessage": "$1"&#xd;
+}</format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('ERROR_MESSAGE')"/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <respond/>
+        </faultSequence>
+    </resource>
+</api>

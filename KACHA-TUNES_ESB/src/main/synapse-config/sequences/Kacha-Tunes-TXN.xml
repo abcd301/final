@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="Kacha-Tunes-TXN" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <filter xpath="get-property('successIndicator')='Success'">
+        <then>
+            <switch source="get-property('txnType')">
+                <case regex="usd-usd">
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:fun="http://temenos.com/FUNDSTRANSFERACTRINCOM" xmlns:pay="http://temenos.com/PAYIN" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Header/>
+                                <soapenv:Body>
+                                    <pay:PAYIN>
+                                        <WebRequestCommon xmlns="">
+                                            <!--Optional:-->
+                                            <company>ET0010001</company>
+                                            <password>$1</password>
+                                            <userName>$2</userName>
+                                        </WebRequestCommon>
+                                        <OfsFunction xmlns=""/>
+                                        <FUNDSTRANSFERACTRINCOMType id="" xmlns="">
+                                            <!--Optional:-->
+                                            <fun:TransactionType>ACKT</fun:TransactionType>
+                                            <!--Optional:-->
+                                            <fun:DebitAccount>$4</fun:DebitAccount>
+                                            <!--Optional:-->
+                                            <fun:DebitCurrency>USD</fun:DebitCurrency>
+                                            <!--Optional:-->
+                                            <fun:DebitAmount>$5</fun:DebitAmount>
+                                            <!--Optional:-->
+                                            <fun:DebitNarrative>$6</fun:DebitNarrative>
+                                            <!--Optional:-->
+                                            <fun:CreditNarrative>$11</fun:CreditNarrative>
+                                            <!--Optional:-->
+                                            <fun:CreditAccount>$8</fun:CreditAccount>
+                                            <!--Optional:-->
+                                            <fun:CreditCurrency>$9</fun:CreditCurrency>
+                                            <!--Optional:-->
+                                            <fun:gORDERINGCUST g="1">
+                                                <!--Zero or more repetitions:-->
+                                                <fun:OrderedBy>$10</fun:OrderedBy>
+                                            </fun:gORDERINGCUST>
+                                            <!--Optional:-->
+                                            <fun:MMTTransactionId>$11</fun:MMTTransactionId>
+                                        </FUNDSTRANSFERACTRINCOMType>
+                                    </pay:PAYIN>
+                                </soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('ProdPass')"/>
+                            <arg evaluator="xml" expression="get-property('ProdUser')"/>
+                            <arg evaluator="xml" expression="get-property('transactionType')"/>
+                            <arg evaluator="xml" expression="get-property('account')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                            <arg evaluator="xml" expression="get-property('creditedAmount')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                            <arg evaluator="xml" expression="get-property('paymentDetail')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                            <arg evaluator="xml" expression="get-property('fromAccount')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                            <arg evaluator="xml" expression="get-property('creditedAccount')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                            <arg evaluator="xml" expression="get-property('creditCurrency')"/>
+                            <arg evaluator="xml" expression="get-property('user')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                            <arg evaluator="xml" expression="get-property('externalRef')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                        </args>
+                    </payloadFactory>
+                </case>
+                <case regex="usd-etb">
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:fun="http://temenos.com/FUNDSTRANSFERACTRINCOM" xmlns:pay="http://temenos.com/PAYIN" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Header/>
+                                <soapenv:Body>
+                                    <pay:PAYIN>
+                                        <WebRequestCommon xmlns="">
+                                            <!--Optional:-->
+                                            <company>ET0010001</company>
+                                            <password>$1</password>
+                                            <userName>$2</userName>
+                                        </WebRequestCommon>
+                                        <OfsFunction xmlns=""/>
+                                        <FUNDSTRANSFERACTRINCOMType id="" xmlns="">
+                                            <!--Optional:-->
+                                            <fun:TransactionType>ACKT</fun:TransactionType>
+                                            <!--Optional:-->
+                                            <fun:DebitAccount>USD1792200020019</fun:DebitAccount>
+                                            <!--Optional:-->
+                                            <fun:DebitCurrency>USD</fun:DebitCurrency>
+                                            <!--Optional:-->
+                                            <fun:DebitAmount>$4</fun:DebitAmount>
+                                            <!--Optional:-->
+                                            <fun:DebitNarrative>$5</fun:DebitNarrative>
+                                            <!--Optional:-->
+                                            <fun:CreditNarrative>$6</fun:CreditNarrative>
+                                            <!--Optional:-->
+                                            <fun:CreditAccount>ETB1258200010019</fun:CreditAccount>
+                                            <!--Optional:-->
+                                            <fun:CreditCurrency>ETB</fun:CreditCurrency>
+                                            <!--Optional:-->
+                                            <fun:gORDERINGCUST g="1">
+                                                <!--Zero or more repetitions:-->
+                                                <fun:OrderedBy>$7</fun:OrderedBy>
+                                            </fun:gORDERINGCUST>
+                                            <!--Optional:-->
+                                            <fun:MMTTransactionId>$6</fun:MMTTransactionId>
+                                        </FUNDSTRANSFERACTRINCOMType>
+                                    </pay:PAYIN>
+                                </soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('ProdPass')"/>
+                            <arg evaluator="xml" expression="get-property('ProdUser')"/>
+                            <arg evaluator="xml" expression="get-property('transactionType')"/>
+                            <arg evaluator="xml" expression="get-property('debitedAmount')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                            <arg evaluator="xml" expression="get-property('paymentDetail')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                            <arg evaluator="xml" expression="get-property('externalRef')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                            <arg evaluator="xml" expression="get-property('user')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                        </args>
+                    </payloadFactory>
+                </case>
+                <case regex="etb-etb">
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:fun="http://temenos.com/FUNDSTRANSFERACTRINCOM" xmlns:pay="http://temenos.com/PAYIN" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Header/>
+                                <soapenv:Body>
+                                    <pay:PAYIN>
+                                        <WebRequestCommon xmlns="">
+                                            <!--Optional:-->
+                                            <company>ET0010001</company>
+                                            <password>$1</password>
+                                            <userName>$2</userName>
+                                        </WebRequestCommon>
+                                        <OfsFunction xmlns=""/>
+                                        <FUNDSTRANSFERACTRINCOMType id="" xmlns="">
+                                            <!--Optional:-->
+                                            <fun:TransactionType>ACKT</fun:TransactionType>
+                                            <!--Optional:-->
+                                            <fun:DebitAccount>ETB1258200010019</fun:DebitAccount>
+                                            <!--Optional:-->
+                                            <fun:DebitCurrency>ETB</fun:DebitCurrency>
+                                            <!--Optional:-->
+                                            <fun:DebitAmount>$4</fun:DebitAmount>
+                                            <!--Optional:-->
+                                            <fun:DebitNarrative>$5</fun:DebitNarrative>
+                                            <!--Optional:-->
+                                            <fun:CreditNarrative>$6</fun:CreditNarrative>
+                                            <!--Optional:-->
+                                            <fun:CreditAccount>$7</fun:CreditAccount>
+                                            <!--Optional:-->
+                                            <fun:CreditCurrency>ETB</fun:CreditCurrency>
+                                            <!--Optional:-->
+                                            <fun:gORDERINGCUST g="1">
+                                                <!--Zero or more repetitions:-->
+                                                <fun:OrderedBy>$8</fun:OrderedBy>
+                                            </fun:gORDERINGCUST>
+                                            <!--Optional:-->
+                                            <fun:MMTTransactionId>$6</fun:MMTTransactionId>
+                                        </FUNDSTRANSFERACTRINCOMType>
+                                    </pay:PAYIN>
+                                </soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('ProdPass')"/>
+                            <arg evaluator="xml" expression="get-property('ProdUser')"/>
+                            <arg evaluator="xml" expression="get-property('transactionType')"/>
+                            <arg evaluator="xml" expression="get-property('debitedAmount')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                            <arg evaluator="xml" expression="get-property('paymentDetail')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                            <arg evaluator="xml" expression="get-property('externalRef')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                            <arg evaluator="xml" expression="get-property('creditedAccount')"/>
+                            <arg evaluator="xml" expression="get-property('user')" xmlns:ns="http://org.apache.synapse/xsd"/>
+                        </args>
+                    </payloadFactory>
+                </case>
+                <default>
+                    <payloadFactory media-type="json">
+                        <format>{&#xd;
+   "status": "fail",&#xd;
+   "errorMessage":"Unhandled error occured",&#xd;
+}</format>
+                        <args/>
+                    </payloadFactory>
+                    <respond/>
+                </default>
+            </switch>
+            <send>
+                <endpoint key="KACHA-THUNES-TXN_EP"/>
+            </send>
+        </then>
+        <else>
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
+            <payloadFactory media-type="json">
+                <format>{&#xd;
+	"status": "fail",    &#xd;
+	"transactionId": "$1",&#xd;
+    "errorMessage": "$2"&#xd;
+}</format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('transactionId')"/>
+                    <arg evaluator="xml" expression="get-property('message')"/>
+                </args>
+            </payloadFactory>
+            <respond/>
+        </else>
+    </filter>
+</sequence>

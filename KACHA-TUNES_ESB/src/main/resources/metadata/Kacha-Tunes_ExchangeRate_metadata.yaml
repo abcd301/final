@@ -1,0 +1,10 @@
+---
+key: "Kacha-Tunes_ExchangeRate-1.0.0"
+name : "Kacha-Tunes_ExchangeRate"
+displayName : "Kacha-Tunes_ExchangeRate"
+description: "Sample API"
+version: "1.0.0"
+serviceUrl: "https://{MI_HOST}:{MI_PORT}/ExchangeRate"
+definitionType: "OAS3"
+securityType: "BASIC"
+mutualSSLEnabled: false

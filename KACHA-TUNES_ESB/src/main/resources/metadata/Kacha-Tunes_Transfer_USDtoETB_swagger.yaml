@@ -1,0 +1,13 @@
+openapi: 3.0.1
+info:
+  title: Kacha-Tunes_Transfer_USDtoETB
+  description: API Definition of Kacha-Tunes_Transfer_USDtoETB
+  version: 1.0.0
+servers:
+- url: http://localhost:8290/NIB/api/kacha/transfer/usd-to-etb
+paths:
+  /:
+    post:
+      responses:
+        default:
+          description: Default response

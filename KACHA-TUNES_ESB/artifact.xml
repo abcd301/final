@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="Kacha-Tunes_Balance" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/Kacha-Tunes_Balance.xml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_Balance_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/Kacha-Tunes_Balance_swagger.yaml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_Balance_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/Kacha-Tunes_Balance_metadata.yaml</file>
+    </artifact>
+    <artifact name="credentials" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/credentials.xml</file>
+    </artifact>
+    <artifact name="KACHA-THUNES-TXN_EP" groupId="com.example.endpoint" version="1.0.0" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/KACHA-THUNES-TXN_EP.xml</file>
+    </artifact>
+    <artifact name="KACHA-THUNES_EP" groupId="com.example.endpoint" version="1.0.0" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/KACHA-THUNES_EP.xml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_Transfer" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/Kacha-Tunes_Transfer.xml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_Transfer_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/Kacha-Tunes_Transfer_swagger.yaml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_Transfer_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/Kacha-Tunes_Transfer_metadata.yaml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes-TXN-Response" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/Kacha-Tunes-TXN-Response.xml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes-TXN" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/Kacha-Tunes-TXN.xml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_Validate" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/Kacha-Tunes_Validate.xml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_ExchangeRate" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/Kacha-Tunes_ExchangeRate.xml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_ExchangeRate_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/Kacha-Tunes_ExchangeRate_swagger.yaml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_ExchangeRate_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/Kacha-Tunes_ExchangeRate_metadata.yaml</file>
+    </artifact>
+    <artifact name="KACHA-THUNES_EXCHANGERATE_EP" groupId="com.example.endpoint" version="1.0.0" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/KACHA-THUNES_EXCHANGERATE_EP.xml</file>
+    </artifact>
+    <artifact name="transferSchemaKachaTunes" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/transferSchemaKachaTunes.xml</file>
+    </artifact>
+    <artifact name="kachaTunesCred" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/kachaTunesCred.xml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_ExchangeRateAll" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/Kacha-Tunes_ExchangeRateAll.xml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_ExchangeRateAll_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/Kacha-Tunes_ExchangeRateAll_swagger.yaml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_ExchangeRateAll_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/Kacha-Tunes_ExchangeRateAll_metadata.yaml</file>
+    </artifact>
+    <artifact name="transferSchemaKachaTunesUSDETB" groupId="com.example.local-entry" version="1.0.0" type="synapse/local-entry" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/local-entries/transferSchemaKachaTunesUSDETB.xml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_USD_ETB" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/Kacha-Tunes_USD_ETB.xml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_USD_ETB_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/Kacha-Tunes_USD_ETB_swagger.yaml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_USD_ETB_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/Kacha-Tunes_USD_ETB_metadata.yaml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_ETB_ETB" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/Kacha-Tunes_ETB_ETB.xml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_ETB_ETB_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/Kacha-Tunes_ETB_ETB_swagger.yaml</file>
+    </artifact>
+    <artifact name="Kacha-Tunes_ETB_ETB_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/Kacha-Tunes_ETB_ETB_metadata.yaml</file>
+    </artifact>
+</artifacts>
